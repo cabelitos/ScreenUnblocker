@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minHeight="@dimen/list_item_min_height"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:id="@+id/ssid"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_toLeftOf="@+id/disable_keyguard"
+        android:textAlignment="gravity"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+    <Switch
+        android:layout_marginLeft="3dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:textOn="@string/disable_keyguard"
+        android:textOff="@string/enable_keyguard"
+        android:id="@id/disable_keyguard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
