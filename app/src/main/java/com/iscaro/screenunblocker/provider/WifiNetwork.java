@@ -85,7 +85,9 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
             if (TextUtils.isEmpty(result.SSID)) {
                 continue;
             }
-            networks.add(new WifiNetwork(ID_NOT_SET, result.SSID, result.BSSID, false));
+            WifiNetwork wn = new WifiNetwork(ID_NOT_SET, result.SSID, result.BSSID, false);
+            Log.d(TAG, "Adding:" + wn);
+            networks.add(wn);
         }
         return networks;
     }

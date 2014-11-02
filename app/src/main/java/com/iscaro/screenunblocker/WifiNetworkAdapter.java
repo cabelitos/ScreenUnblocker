@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.iscaro.screenunblocker.provider.WifiNetwork;
@@ -40,14 +40,14 @@ public class WifiNetworkAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         final TextView mSsid;
-        final Switch mSwitch;
+        final CheckBox mCheck;
         final WifiNetworkOnCheckedChanged mListener;
         WifiNetwork mNetwork;
 
-        public ViewHolder(TextView ssid, Switch aSwitch,
+        public ViewHolder(TextView ssid, CheckBox check,
                           final WifiNetworkOnCheckedChanged listener) {
             mSsid = ssid;
-            mSwitch = aSwitch;
+            mCheck = check;
             mListener = listener;
         }
     }
@@ -146,17 +146,17 @@ public class WifiNetworkAdapter extends BaseAdapter {
         if (view == null) {
             view = inflater.inflate(mListItem, viewGroup, false);
             holder = new ViewHolder((TextView) view.findViewById(R.id.ssid),
-                    (Switch)view.findViewById(R.id.disable_keyguard), mOnCheckedChangedListener);
+                    (CheckBox)view.findViewById(R.id.disable_keyguard), mOnCheckedChangedListener);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        holder.mSwitch.setOnCheckedChangeListener(null);
+        holder.mCheck.setOnCheckedChangeListener(null);
         holder.mSsid.setText(network.getSsid());
-        holder.mSwitch.setChecked(network.isKnown());
+        holder.mCheck.setChecked(network.isKnown());
         holder.mNetwork = network;
-        holder.mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.mCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 holder.mListener.onCheckChanged(holder.mNetwork, b);

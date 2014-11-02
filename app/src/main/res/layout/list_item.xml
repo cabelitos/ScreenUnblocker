@@ -15,12 +15,10 @@
         android:textAlignment="gravity"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
-    <Switch
+    <CheckBox
         android:layout_marginLeft="3dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:textOn="@string/disable_keyguard"
-        android:textOff="@string/enable_keyguard"
         android:id="@id/disable_keyguard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
