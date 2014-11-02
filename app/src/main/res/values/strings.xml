@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Screen Unblocker</string>
-    <string name="automatically_disable">Automatically disable keyguard for the networks bellow</string>
+    <string name="automatically_disable">Automatically disable keyguard</string>
     <string name="no_networks">No wifi networks</string>
     <string name="unknown">Unknown</string>
     <string name="known">Known</string>
