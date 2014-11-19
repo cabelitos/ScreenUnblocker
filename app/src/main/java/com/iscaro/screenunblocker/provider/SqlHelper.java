@@ -10,13 +10,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class SqlHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ScreenUnblocker";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String KNOWN_NETWORKS_TABLE = "known_networks";
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SSID = "ssid";
-    public static final String COLUMN_ADDRESS = "address";
 
     public SqlHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,8 +24,7 @@ public class SqlHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String create = "CREATE TABLE " + KNOWN_NETWORKS_TABLE + " ( " + COLUMN_ID + " integer " +
-                "primary key autoincrement," + COLUMN_SSID + " text not null, " +
-                COLUMN_ADDRESS + " text not null, unique ( " + COLUMN_ID + "," + COLUMN_ADDRESS + " ));";
+                "primary key autoincrement," + COLUMN_SSID + " text not null unique); ";
         db.execSQL(create);
     }
 

@@ -86,7 +86,7 @@ public class ScreenUnblockerService extends Service {
             WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
             WifiInfo wInfo = wifiManager.getConnectionInfo();
 
-            if (wInfo != null && isKnownWiFi(wInfo.getSSID(), wInfo.getBSSID())) {
+            if (wInfo != null && isKnownWiFi(wInfo.getSSID())) {
                 Log.d(TAG, "Disabling keyguard. Wifi ssid:"+wInfo.getSSID());
                 mLock.disableKeyguard();
                 mIsDisabled = true;
@@ -99,9 +99,9 @@ public class ScreenUnblockerService extends Service {
 
     }
 
-    private boolean isKnownWiFi(String ssid, String address) {
+    private boolean isKnownWiFi(String ssid) {
         //Android adds "" to the ssid, remove it.
-        if (WifiNetwork.queryBySSIDAndAddress(this, ssid.replace("\"", ""), address) != null) {
+        if (WifiNetwork.queryBySSIDAndAddress(this, ssid.replace("\"", "")) != null) {
             return true;
         }
         return false;

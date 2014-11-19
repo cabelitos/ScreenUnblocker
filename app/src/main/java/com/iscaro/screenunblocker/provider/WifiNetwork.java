@@ -25,7 +25,6 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
     private static final long ID_NOT_SET = -1;
     private long mId;
     private String mSsid;
-    private String mAddress;
     private boolean mKnown;
 
     private static class AsyncQuery extends AsyncQueryHandler {
@@ -41,11 +40,10 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
         }
     }
 
-    private WifiNetwork(long id, String ssid, String address, boolean known) {
+    private WifiNetwork(long id, String ssid, boolean known) {
         mId = id;
         mSsid = ssid;
         mKnown = known;
-        mAddress = address;
     }
 
     private WifiNetwork() {
@@ -62,16 +60,15 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
         AsyncQuery query = new AsyncQuery(resolver);
         ContentValues values = new ContentValues();
         values.put(SqlHelper.COLUMN_SSID, network.getSsid());
-        values.put(SqlHelper.COLUMN_ADDRESS, network.getAddress());
         query.startInsert(-1, null, ScreenUnblockerContentProvider.KNOWN_NETWORKS_URI, values);
     }
 
-    public static WifiNetwork queryBySSIDAndAddress(Context context, String ssid, String address) {
-        Log.d(TAG, "searching for ssid:" + ssid + " address:" + address);
+    public static WifiNetwork queryBySSIDAndAddress(Context context, String ssid) {
+        Log.d(TAG, "searching for ssid:" + ssid);
         Cursor cursor = context.getContentResolver().query(
                 ScreenUnblockerContentProvider.KNOWN_NETWORKS_URI, null,
-                SqlHelper.COLUMN_SSID + " = ? and " + SqlHelper.COLUMN_ADDRESS + " = ?",
-                new String[] {ssid, address}, null);
+                SqlHelper.COLUMN_SSID + " = ?",
+                new String[] {ssid}, null);
         List<WifiNetwork> list = fromCursor(cursor);
         if (list.size() == 0) {
             return null;
@@ -85,7 +82,7 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
             if (TextUtils.isEmpty(result.SSID)) {
                 continue;
             }
-            WifiNetwork wn = new WifiNetwork(ID_NOT_SET, result.SSID, result.BSSID, false);
+            WifiNetwork wn = new WifiNetwork(ID_NOT_SET, result.SSID, false);
             Log.d(TAG, "Adding:" + wn);
             networks.add(wn);
         }
@@ -100,8 +97,7 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             networks.add(new WifiNetwork(cursor.getLong(cursor.getColumnIndex(SqlHelper.COLUMN_ID)),
-                    cursor.getString(cursor.getColumnIndex(SqlHelper.COLUMN_SSID)),
-                    cursor.getString(cursor.getColumnIndex(SqlHelper.COLUMN_ADDRESS)), true));
+                    cursor.getString(cursor.getColumnIndex(SqlHelper.COLUMN_SSID)), true));
             cursor.moveToNext();
         }
         return networks;
@@ -112,7 +108,7 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
             mKnown = true;
             mId = network.mId;
         } else if (mKnown && !network.mKnown &&
-                queryBySSIDAndAddress(context, mSsid, mAddress) == null) {
+                queryBySSIDAndAddress(context, mSsid) == null) {
             mKnown = false;
             mId = ID_NOT_SET;
         }
@@ -138,9 +134,6 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
     public String getSsid() {
         return mSsid;
     }
-    public String getAddress() {
-        return mAddress;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -149,8 +142,6 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
 
         WifiNetwork that = (WifiNetwork) o;
 
-        if (mAddress != null ? !mAddress.equals(that.mAddress) : that.mAddress != null)
-            return false;
         if (mSsid != null ? !mSsid.equals(that.mSsid) : that.mSsid != null) return false;
 
         return true;
@@ -160,7 +151,6 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
     public int hashCode() {
         int result = (int)mId;
         result = 31 * result + (mSsid != null ? mSsid.hashCode() : 0);
-        result = 31 * result + (mAddress != null ? mAddress.hashCode() : 0);
         return result;
     }
 
@@ -169,7 +159,6 @@ public class WifiNetwork implements Comparable<WifiNetwork> {
         return "WifiNetwork{" +
                 "mId=" + mId +
                 ", mSsid='" + mSsid + '\'' +
-                ", mAddress='" + mAddress + '\'' +
                 '}';
     }
 
