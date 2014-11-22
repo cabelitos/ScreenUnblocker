@@ -134,6 +134,7 @@ public class ScreenUnblockerService extends Service {
             editor.putBoolean(WIFI_UNBLOCKER_ENABLED_KEY, false);
             editor.commit();
             lockScreenIfNeeded();
+            stopSelf();
         } else if (ENABLE_SERVICE_ACTION.equals(action)) {
             editor.putBoolean(WIFI_UNBLOCKER_ENABLED_KEY, true);
             editor.commit();
