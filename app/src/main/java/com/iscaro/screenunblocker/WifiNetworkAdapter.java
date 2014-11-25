@@ -58,7 +58,7 @@ public class WifiNetworkAdapter extends BaseAdapter {
         mListItem = listItem;
         mComparator = new WifiNetwork.WifiNetworkComparator();
         mNetworks = new ArrayList<WifiNetwork>();
-        mContext = context.getApplicationContext();
+        mContext = context;
         mOnCheckedChangedListener = onCheckedChangedListener;
     }
 

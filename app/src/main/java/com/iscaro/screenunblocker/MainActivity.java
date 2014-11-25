@@ -11,13 +11,13 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.ListView;
-import android.widget.Switch;
 
 import com.iscaro.screenunblocker.provider.ScreenUnblockerContentProvider;
 import com.iscaro.screenunblocker.provider.WifiNetwork;
@@ -25,7 +25,7 @@ import com.iscaro.screenunblocker.provider.WifiNetwork;
 import java.util.List;
 
 
-public class MainActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private class WifiScanReceiver extends BroadcastReceiver {
         @Override
@@ -108,7 +108,7 @@ public class MainActivity extends FragmentActivity implements LoaderManager.Load
                     }
                 });
         list.setAdapter(mAdapter);
-        Switch s = (Switch)findViewById(R.id.switch_enable);
+        SwitchCompat s = (SwitchCompat)findViewById(R.id.switch_enable);
         boolean enabled = ScreenUnblockerService.isServiceEnabled(this);
         s.setChecked(enabled);
         s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
