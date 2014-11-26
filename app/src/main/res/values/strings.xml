@@ -11,5 +11,6 @@
     <string name="unknown_networks">Unknown networks</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+    <string name="notif_text">The service is running</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.iscaro.screenunblocker;
 
 import android.app.KeyguardManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.iscaro.screenunblocker.provider.ScreenUnblockerContentProvider;
@@ -62,6 +64,7 @@ public class ScreenUnblockerService extends Service {
 
     public static final String DISABLE_SERVICE_ACTION = "com.iscaro.ScreenUnblocker.disable_action";
     public static final String ENABLE_SERVICE_ACTION = "com.iscaro.ScreenUnblocker.enable_action";
+    private static final int NOTIFICATION_ID = 1;
 
     public static final boolean isServiceEnabled(Context context) {
         SharedPreferences prefs = context.getSharedPreferences(WIFI_UNBLOCKER_PREFS_FILE,
@@ -144,6 +147,19 @@ public class ScreenUnblockerService extends Service {
         return START_STICKY;
     }
 
+    private void start() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pending = PendingIntent.getActivity(this, 0, i,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setContentTitle(getString(R.string.app_name));
+        builder.setContentText(getString(R.string.notif_text));
+        builder.setSmallIcon(android.R.drawable.ic_lock_lock);
+        builder.setContentIntent(pending);
+        startForeground(NOTIFICATION_ID, builder.build());
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -156,6 +172,7 @@ public class ScreenUnblockerService extends Service {
         KeyguardManager km =(KeyguardManager)getSystemService(KEYGUARD_SERVICE);
         mLock = km.newKeyguardLock(KEYGUARD_TAG);
         unlockScreenIfNeeded();
+        start();
         Log.d(TAG,"Starting the service");
     }
 
@@ -165,6 +182,7 @@ public class ScreenUnblockerService extends Service {
         unregisterReceiver(mReceiver);
         getContentResolver().unregisterContentObserver(mObserver);
         lockScreenIfNeeded();
+        stopForeground(true);
         Log.d(TAG,"Destroying the service");
     }
 }
