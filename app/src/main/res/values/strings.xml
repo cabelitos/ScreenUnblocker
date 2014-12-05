@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Screen Unblocker</string>
-    <string name="automatically_disable">Automatically disable keyguard</string>
+    <string name="app_name" translatable="false">Screen Unblocker</string>
+    <string name="automatically_disable">Automatically disable the lockscreen</string>
     <string name="no_networks">No wifi networks</string>
-    <string name="unknown">Unknown</string>
-    <string name="known">Known</string>
-    <string name="disable_hint">Disable keyguard ?</string>
-    <string name="know_networks">Known networks</string>
-    <string name="unknown_networks">Unknown networks</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="notif_text">The service is running</string>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notif_text">O serviço está em execução</string>
+    <string name="off">Desligado</string>
+    <string name="on">Ligado</string>
+    <string name="no_networks">Sem redes WiFi</string>
+    <string name="automatically_disable">Desativar a lockscreen automaticamente</string>
+</resources>
