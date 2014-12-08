@@ -185,7 +185,7 @@ public class ScreenUnblockerService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle(getString(R.string.app_name));
         builder.setContentText(getString(R.string.notif_text));
-        builder.setSmallIcon(android.R.drawable.ic_lock_lock);
+        builder.setSmallIcon(R.drawable.ic_notification);
         builder.setContentIntent(pending);
         startForeground(NOTIFICATION_ID, builder.build());
     }
