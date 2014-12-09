@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.1"
 
     defaultConfig {
-        applicationId "com.iscaro.screenunblocker"
+        applicationId "com.icaros.screenunblocker"
         minSdkVersion 7
         targetSdkVersion 21
         versionCode 1
