@@ -91,12 +91,6 @@ public class ScreenUnblockerService extends Service {
     }
 
     private void unlockScreenIfNeeded() {
-
-        if (!isServiceEnabled(this)) {
-            Log.d(TAG, "ScreenUnblocker is disabled");
-            return;
-        }
-
         ConnectivityManager cm = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
@@ -156,22 +150,24 @@ public class ScreenUnblockerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
-        if (intent == null) {
-            return START_STICKY;
+        if (intent != null) {
+            SharedPreferences.Editor editor = getSharedPreferences(WIFI_UNBLOCKER_PREFS_FILE,
+                    Context.MODE_PRIVATE).edit();
+            String action = intent.getAction();
+            if (DISABLE_SERVICE_ACTION.equals(action)) {
+                editor.putBoolean(WIFI_UNBLOCKER_ENABLED_KEY, false);
+                editor.commit();
+                changeKeyguardStatus(false);
+            } else if (ENABLE_SERVICE_ACTION.equals(action)) {
+                editor.putBoolean(WIFI_UNBLOCKER_ENABLED_KEY, true);
+                editor.commit();
+                unlockScreenIfNeeded();
+            }
         }
 
-        SharedPreferences.Editor editor = getSharedPreferences(WIFI_UNBLOCKER_PREFS_FILE,
-                Context.MODE_PRIVATE).edit();
-        String action = intent.getAction();
-        if (DISABLE_SERVICE_ACTION.equals(action)) {
-            editor.putBoolean(WIFI_UNBLOCKER_ENABLED_KEY, false);
-            editor.commit();
-            changeKeyguardStatus(false);
+        if (!isServiceEnabled(this)) {
+            Log.d(TAG, "ScreenUnblocker is disabled");
             stopSelf();
-        } else if (ENABLE_SERVICE_ACTION.equals(action)) {
-            editor.putBoolean(WIFI_UNBLOCKER_ENABLED_KEY, true);
-            editor.commit();
-            unlockScreenIfNeeded();
         }
 
         return START_STICKY;
