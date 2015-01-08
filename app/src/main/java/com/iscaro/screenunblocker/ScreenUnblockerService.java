@@ -74,6 +74,7 @@ public class ScreenUnblockerService extends Service {
     private KeyguardManager.KeyguardLock mLock;
     private WifiNetworkObserver mObserver;
     private boolean mNeedsToDisableKeyguard;
+    private boolean isConnectedToTrustedWifi;
     private static final String KEYGUARD_TAG = "com.iscaro.ScreenUnblocker";
     private static final String WIFI_UNBLOCKER_ENABLED_KEY = "com.iscaro.ScreenUnblocker.enabled_key";
     private static final String WIFI_UNBLOCKER_PREFS_FILE = "com.iscaro.ScreenUnblocker.prefs_file";
@@ -94,6 +95,7 @@ public class ScreenUnblockerService extends Service {
         ConnectivityManager cm = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
+        isConnectedToTrustedWifi = false;
 
         if (info != null && info.getType() == ConnectivityManager.TYPE_WIFI &&
                 info.isConnected()) {
@@ -103,6 +105,7 @@ public class ScreenUnblockerService extends Service {
 
             if (wInfo != null && isKnownWiFi(wInfo.getSSID())) {
                 Log.d(TAG, "Disabling keyguard. Wifi ssid:"+wInfo.getSSID());
+                isConnectedToTrustedWifi = true;
                 changeKeyguardStatus(true);
             } else {
                 changeKeyguardStatus(false);
@@ -130,7 +133,7 @@ public class ScreenUnblockerService extends Service {
             mLock.reenableKeyguard();
             mLock = null;
             mNeedsToDisableKeyguard = false;
-        } else if (unlock) {
+        } else if (unlock && isConnectedToTrustedWifi && isServiceEnabled(this)) {
             Log.d(TAG, "Disabling the keyguard");
             if (km.inKeyguardRestrictedInputMode()) {
                 mNeedsToDisableKeyguard = true;
